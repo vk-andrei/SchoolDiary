@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="lessons_names">
+        <item>Algebra</item>
+        <item>Russian</item>
+        <item>Literature</item>
+        <item>Fizra</item>
+        <item>Painting</item>
+        <item>History</item>
+        <item>English</item>
+    </string-array>
+
+    <integer-array name="images">
+        <item>@drawable/algebra</item>
+        <item>@drawable/english</item>
+        <item>@drawable/fizra</item>
+        <item>@drawable/history</item>
+        <item>@drawable/literature</item>
+        <item>@drawable/painting</item>
+        <item>@drawable/russian</item>
+    </integer-array>
+
+    <string-array name="lessons_description">
+        <item>Algebra - is cool!</item>
+        <item>Russian - is cool!</item>
+        <item>Literature - is cool!</item>
+        <item>Fizra - is cool!</item>
+        <item>Painting - is cool!</item>
+        <item>History - is cool!</item>
+        <item>English - is cool!</item>
+    </string-array>
+
+
+</resources>
