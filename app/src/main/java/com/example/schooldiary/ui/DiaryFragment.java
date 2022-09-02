@@ -1,7 +1,11 @@
 package com.example.schooldiary.ui;
 
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -12,10 +16,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.schooldiary.R;
+import com.example.schooldiary.repository.CardData;
+import com.example.schooldiary.repository.CardsSource;
+import com.example.schooldiary.repository.CardsSourceLocalImpl;
 
 public class DiaryFragment extends Fragment implements OnMyItemClickListener {
 
     DiaryAdapter diaryAdapter;
+    CardsSource cardsSource;
 
 
     public DiaryFragment() {
@@ -50,16 +58,18 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        cardsSource = new CardsSourceLocalImpl(requireContext().getResources()).init();
         initDiaryAdapter();
         initRecyclerView(view);
+        setHasOptionsMenu(true);
     }
 
     private void initDiaryAdapter() {
-        diaryAdapter = new DiaryAdapter();
-        diaryAdapter.setData(getData());
+        diaryAdapter = new DiaryAdapter(this);
+        diaryAdapter.setData(cardsSource);
         diaryAdapter.setOnMyItemClickListener(this);
     }
+
     private void initRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_lessons);
         recyclerView.setHasFixedSize(true);
@@ -71,9 +81,48 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
         return lessonNames;
     }
 
-
     @Override
     public void onMyItemClick(int position) {
         Toast.makeText(requireActivity(), "Item " + getData()[position], Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.cards_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                cardsSource.addCardData(new CardData("New card" + cardsSource.size(),
+                        "New desc" + cardsSource.size(), R.drawable.algebra, false));
+                diaryAdapter.notifyItemInserted(cardsSource.size() - 1);
+                return true;
+            case R.id.action_clear:
+                cardsSource.clearAllCards();
+                diaryAdapter.notifyDataSetChanged();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        requireActivity().getMenuInflater().inflate(R.menu.card_menu, menu);
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_update:
+                return true;
+            case R.id.action_delete:
+                return true;
+
+        }
+        return super.onContextItemSelected(item);
     }
 }

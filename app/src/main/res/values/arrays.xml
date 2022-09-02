@@ -13,12 +13,12 @@
 
     <integer-array name="images">
         <item>@drawable/algebra</item>
-        <item>@drawable/english</item>
-        <item>@drawable/fizra</item>
-        <item>@drawable/history</item>
-        <item>@drawable/literature</item>
-        <item>@drawable/painting</item>
         <item>@drawable/russian</item>
+        <item>@drawable/literature</item>
+        <item>@drawable/fizra</item>
+        <item>@drawable/painting</item>
+        <item>@drawable/history</item>
+        <item>@drawable/english</item>
     </integer-array>
 
     <string-array name="lessons_description">

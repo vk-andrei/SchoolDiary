@@ -12,33 +12,44 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <!--<androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="DATE"
             android:textAlignment="center">
 
-        </androidx.appcompat.widget.AppCompatTextView>
+        </androidx.appcompat.widget.AppCompatTextView>-->
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/img_lesson_image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="fitXY"
-            />
+            android:scaleType="fitXY" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <CheckBox
+            <androidx.appcompat.widget.AppCompatToggleButton
+                android:id="@+id/chk_lesson"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_favourite"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+
+
+            <!--<CheckBox
                 android:id="@+id/chk_lesson"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" />-->
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_lesson_name"
