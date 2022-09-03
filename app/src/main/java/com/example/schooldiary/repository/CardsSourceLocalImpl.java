@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import com.example.schooldiary.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class CardsSourceLocalImpl implements CardsSource {
@@ -28,7 +29,7 @@ public class CardsSourceLocalImpl implements CardsSource {
         Boolean like = false;
 
         for (int i = 0; i < titles.length; i++) {
-            dataSource.add(new CardData(titles[i], descriptions[i], images.getResourceId(i, 0), false));
+            dataSource.add(new CardData(titles[i], descriptions[i], images.getResourceId(i, 0), false, Calendar.getInstance().getTime()));
         }
         return this;
     }

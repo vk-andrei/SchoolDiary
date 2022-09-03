@@ -22,6 +22,8 @@ import com.example.schooldiary.repository.CardData;
 import com.example.schooldiary.repository.CardsSource;
 import com.example.schooldiary.repository.CardsSourceLocalImpl;
 
+import java.util.Calendar;
+
 public class DiaryFragment extends Fragment implements OnMyItemClickListener {
 
     DiaryAdapter diaryAdapter;
@@ -108,7 +110,8 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
         switch (item.getItemId()) {
             case R.id.action_add:
                 cardsSource.addCardData(new CardData("New card" + cardsSource.size(),
-                        "New desc" + cardsSource.size(), R.drawable.algebra, false));
+                        "New desc" + cardsSource.size(), R.drawable.algebra, false,
+                        Calendar.getInstance().getTime()));
                 diaryAdapter.notifyItemInserted(cardsSource.size() - 1);
                 recyclerView.smoothScrollToPosition(cardsSource.size() - 1);
                 return true;
@@ -133,7 +136,9 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
         switch (item.getItemId()) {
             case R.id.action_update:
                 cardsSource.updateCardData(menuPosition, new CardData("Upd card" + cardsSource.size(),
-                        "Upd desc" + cardsSource.size(), cardsSource.getCardData(menuPosition).getImage(), false));
+                        "Upd desc" + cardsSource.size(),
+                        cardsSource.getCardData(menuPosition).getImage(), false,
+                        Calendar.getInstance().getTime()));
                 diaryAdapter.notifyItemChanged(menuPosition);
                 return true;
             case R.id.action_delete:
