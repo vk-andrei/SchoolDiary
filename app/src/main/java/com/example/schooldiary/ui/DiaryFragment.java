@@ -18,13 +18,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.schooldiary.R;
+import com.example.schooldiary.publisher.Observer;
 import com.example.schooldiary.repository.CardData;
 import com.example.schooldiary.repository.CardsSource;
 import com.example.schooldiary.repository.CardsSourceLocalImpl;
 
 import java.util.Calendar;
 
-public class DiaryFragment extends Fragment implements OnMyItemClickListener {
+public class DiaryFragment extends Fragment implements OnMyItemClickListener, Observer {
 
     DiaryAdapter diaryAdapter;
     CardsSource cardsSource;
@@ -147,5 +148,10 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
                 return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void receivedMessage(CardData cardData) {
+
     }
 }
