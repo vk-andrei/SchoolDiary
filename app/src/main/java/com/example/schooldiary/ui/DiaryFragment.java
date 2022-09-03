@@ -1,5 +1,6 @@
 package com.example.schooldiary.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.schooldiary.R;
@@ -24,7 +26,7 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
 
     DiaryAdapter diaryAdapter;
     CardsSource cardsSource;
-
+    RecyclerView recyclerView;
 
     public DiaryFragment() {
         // Required empty public constructor
@@ -71,9 +73,17 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
     }
 
     private void initRecyclerView(View view) {
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_lessons);
+        recyclerView = view.findViewById(R.id.recycler_lessons);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(diaryAdapter);
+
+        /** Незатейливая анимация для начала **/
+        DefaultItemAnimator animator = new DefaultItemAnimator();
+        animator.setChangeDuration(5000);
+        animator.setRemoveDuration(5000);
+        recyclerView.setItemAnimator(animator);
+        /**************************************/
+
     }
 
     private String[] getData() {
@@ -92,6 +102,7 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @SuppressLint({"NotifyDataSetChanged", "NonConstantResourceId"})
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -99,6 +110,7 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
                 cardsSource.addCardData(new CardData("New card" + cardsSource.size(),
                         "New desc" + cardsSource.size(), R.drawable.algebra, false));
                 diaryAdapter.notifyItemInserted(cardsSource.size() - 1);
+                recyclerView.smoothScrollToPosition(cardsSource.size() - 1);
                 return true;
             case R.id.action_clear:
                 cardsSource.clearAllCards();
@@ -114,14 +126,20 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int menuPosition = diaryAdapter.getMenuPosition();
         switch (item.getItemId()) {
             case R.id.action_update:
+                cardsSource.updateCardData(menuPosition, new CardData("Upd card" + cardsSource.size(),
+                        "Upd desc" + cardsSource.size(), cardsSource.getCardData(menuPosition).getImage(), false));
+                diaryAdapter.notifyItemChanged(menuPosition);
                 return true;
             case R.id.action_delete:
+                cardsSource.deleteCardData(menuPosition);
+                diaryAdapter.notifyItemRemoved(menuPosition);
                 return true;
-
         }
         return super.onContextItemSelected(item);
     }

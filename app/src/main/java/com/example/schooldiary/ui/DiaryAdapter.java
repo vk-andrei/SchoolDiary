@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,11 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.MyViewHolder
     private CardsSource cardsSource;
     private OnMyItemClickListener onMyItemClickListener;
     private Fragment fragmentDiary;
+    private int menuPosition;
+
+    public int getMenuPosition() {
+        return menuPosition;
+    }
 
     public void setOnMyItemClickListener(OnMyItemClickListener onMyItemClickListener) {
         this.onMyItemClickListener = onMyItemClickListener;
@@ -75,7 +81,23 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.MyViewHolder
             imgLesson = itemView.findViewById(R.id.img_lesson_image);
             chkLesson = itemView.findViewById(R.id.chk_lesson);
 
-            fragmentDiary.registerForContextMenu(itemView );
+            fragmentDiary.registerForContextMenu(itemView);
+
+            itemView.setOnLongClickListener(view -> {
+                menuPosition = getLayoutPosition();
+                return false;
+            });
+            // для кликабельных элементов
+            imgLesson.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    menuPosition = getLayoutPosition();
+                    //view.showContextMenu(100, 100);
+                    return false;
+                }
+            });
+
+
             /*itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
