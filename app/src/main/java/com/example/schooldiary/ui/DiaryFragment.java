@@ -1,7 +1,10 @@
 package com.example.schooldiary.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,13 +67,89 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        cardsSource = new CardsSourceLocalImpl(requireContext().getResources()).init();
+        initRadioGroup(view);
         initDiaryAdapter();
         initRecyclerView(view);
         setHasOptionsMenu(true);
     }
 
+    static final String KEY_SHARED_PREF = "KEY_SHARED_PREF";
+    static final String KEY_SHARED_PREF_CELL_1 = "KEY_SHARED_PREF_CELL_1";
+
+    static final int KEY_SOURCE_ARRAY = 1;
+    static final int KEY_SOURCE_SHAR_PREF = 2;
+    static final int KEY_SOURCE_FIRE_BASE = 3;
+
+    private void initRadioGroup(View view) {
+        RadioButton rb_array = view.findViewById(R.id.rb_array);
+        RadioButton rb_sharPref = view.findViewById(R.id.rb_sharPref);
+        RadioButton rb_fireBase = view.findViewById(R.id.rb_fireBase);
+
+        rb_array.setOnClickListener(listener);
+        rb_sharPref.setOnClickListener(listener);
+        rb_fireBase.setOnClickListener(listener);
+
+        switch (getSharedPref()) {
+            case KEY_SOURCE_ARRAY:
+                rb_array.setChecked(true);
+                break;
+            case KEY_SOURCE_SHAR_PREF:
+                rb_sharPref.setChecked(true);
+                break;
+            case KEY_SOURCE_FIRE_BASE:
+                rb_fireBase.setChecked(true);
+                break;
+        }
+        Log.d("LOGS", "" + getSharedPref());
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.rb_array:
+                    setSharedPref(KEY_SOURCE_ARRAY);
+                    break;
+                case R.id.rb_sharPref:
+                    setSharedPref(KEY_SOURCE_SHAR_PREF);
+                    break;
+                case R.id.rb_fireBase:
+                    setSharedPref(KEY_SOURCE_FIRE_BASE);
+                    break;
+            }
+        }
+    };
+
+    void setSharedPref(int currentSource) {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences(KEY_SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_SHARED_PREF_CELL_1, currentSource);
+        editor.apply();
+    }
+
+    int getSharedPref() {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences(KEY_SHARED_PREF, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_SHARED_PREF_CELL_1, KEY_SOURCE_ARRAY);
+    }
+
     private void initDiaryAdapter() {
+        // cardsSource = new CardsSourceLocalImpl(requireContext().getResources()).init();
+        switch (getSharedPref()) {
+            case KEY_SOURCE_ARRAY:
+                cardsSource = new CardsSourceLocalImpl(requireContext().getResources()).init();
+                break;
+            case KEY_SOURCE_SHAR_PREF:
+                cardsSource = new CardsSourceLocalImpl(requireContext().getResources()).init();
+
+                //cardsSource = new CardsSourceSharedPrefImpl(requireContext().getResources()).init();
+                break;
+            case KEY_SOURCE_FIRE_BASE:
+                cardsSource = new CardsSourceLocalImpl(requireContext().getResources()).init();
+
+                //cardsSource = new CardsSourceFireBaseImpl(requireContext().getResources()).init();
+                break;
+        }
         diaryAdapter = new DiaryAdapter(this);
         diaryAdapter.setData(cardsSource);
         diaryAdapter.setOnMyItemClickListener(this);

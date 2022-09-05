@@ -7,10 +7,38 @@
     android:background="@color/white"
     tools:context=".ui.DiaryFragment">
 
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="?actionBarSize"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rb_array"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/array" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rb_sharPref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sharpref" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rb_fireBase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/firebase" />
+
+    </RadioGroup>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_lessons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/fragment_diary_recycler_cardview_item">
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,10 @@ public class CardEditorFragment extends Fragment {
 
     private CardData cardData;
     private Calendar calendar;
+
+    private DatePicker dp_inputDate;
+    private EditText et_title;
+    private EditText et_desc;
 
     public CardEditorFragment() {
         // Required empty public constructor
@@ -47,46 +52,63 @@ public class CardEditorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (getArguments() != null) {
-            cardData = getArguments().getParcelable("cardData");
-            ((EditText) view.findViewById(R.id.et_title)).setText(cardData.getTitle());
-            ((EditText) view.findViewById(R.id.et_description)).setText(cardData.getDescription());
+            initView(view);
+            setContent();
+            setListeners(view);
+        }
+    }
 
-            calendar = Calendar.getInstance();
-            calendar.setTime(cardData.getDate());
+    private void initView(View view) {
+        et_title = view.findViewById(R.id.et_title);
+        et_desc = view.findViewById(R.id.et_description);
+        dp_inputDate = view.findViewById(R.id.dp_inputDate);
+    }
 
-            ((DatePicker) view.findViewById(R.id.dp_inputDate)).init(calendar.get(Calendar.YEAR) - 1,
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH),
-                    null);
+    private void setContent() {
+        cardData = getArguments().getParcelable("cardData");
+        et_title.setText(cardData.getTitle());
+        et_desc.setText(cardData.getDescription());
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                ((DatePicker) view.findViewById(R.id.dp_inputDate)).setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, monthOfYear);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    }
-                });
+        calendar = Calendar.getInstance();
+        calendar.setTime(cardData.getDate());
 
-                view.findViewById(R.id.btn_save).setOnClickListener(v -> {
-                    cardData.setTitle(((EditText) view.findViewById(R.id.et_title)).getText().toString());
-                    cardData.setDescription(((EditText) view.findViewById(R.id.et_description)).getText().toString());
+        dp_inputDate.init(calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                null);
+    }
 
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                        DatePicker datePicker = ((DatePicker) view.findViewById(R.id.dp_inputDate));
-                        calendar.set(Calendar.YEAR, datePicker.getYear());
-                        calendar.set(Calendar.MONTH, datePicker.getMonth());
-                        calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-                    }
-
-                    cardData.setDate(calendar.getTime());
-
-                    ((MainActivity) requireActivity()).getPublisher().sendMessage(cardData);
-                    ((MainActivity) requireActivity()).getSupportFragmentManager().popBackStack();
-                });
-            }
+    private void setListeners(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            dp_inputDate.setOnDateChangedListener((view1, year, monthOfYear, dayOfMonth) -> {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            });
         }
 
+        view.findViewById(R.id.btn_save).setOnClickListener(v -> {
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                DatePicker datePicker = ((DatePicker) view.findViewById(R.id.dp_inputDate));
+                calendar.set(Calendar.YEAR, datePicker.getYear());
+                calendar.set(Calendar.MONTH, datePicker.getMonth());
+                calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+            }
+            save();
+        });
+
+        view.findViewById(R.id.btn_cancel).setOnClickListener(v -> {
+            requireActivity().onBackPressed();
+        });
+    }
+
+    private void save() {
+        cardData.setDate(calendar.getTime());
+        cardData.setTitle(et_title.getText().toString());
+        cardData.setDescription(et_desc.getText().toString());
+
+        ((MainActivity) requireActivity()).getPublisher().sendMessage(cardData);
+        ((MainActivity) requireActivity()).getSupportFragmentManager().popBackStack();
     }
 }

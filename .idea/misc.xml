@@ -3,9 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/_GEEK/02_ANDROID/Projects/SchoolDiary/app/src/main/res/layout/activity_main.xml" value="0.25833333333333336" />
-        <entry key="..\:/_GEEK/02_ANDROID/Projects/SchoolDiary/app/src/main/res/layout/fragment_blank.xml" value="0.36041666666666666" />
-        <entry key="..\:/_GEEK/02_ANDROID/Projects/SchoolDiary/app/src/main/res/layout/fragment_card_editor.xml" value="0.27239583333333334" />
+        <entry key="..\:/Android_projects/SchoolDiary/app/src/main/res/drawable/button_favourite.xml" value="0.2" />
+        <entry key="..\:/Android_projects/SchoolDiary/app/src/main/res/drawable/ic_favourite_border.xml" value="0.2" />
+        <entry key="..\:/Android_projects/SchoolDiary/app/src/main/res/layout/activity_main.xml" value="0.30052083333333335" />
+        <entry key="..\:/Android_projects/SchoolDiary/app/src/main/res/layout/fragment_card_editor.xml" value="0.1765625" />
+        <entry key="..\:/Android_projects/SchoolDiary/app/src/main/res/layout/fragment_diary.xml" value="0.30052083333333335" />
+        <entry key="..\:/Android_projects/SchoolDiary/app/src/main/res/layout/fragment_diary_recycler_cardview_item.xml" value="0.22291666666666668" />
+        <entry key="..\:/Android_projects/SchoolDiary/app/src/main/res/menu/card2_menu.xml" value="0.14895833333333333" />
+        <entry key="..\:/Android_projects/SchoolDiary/app/src/main/res/menu/card_menu.xml" value="0.2994791666666667" />
+        <entry key="..\:/Android_projects/SchoolDiary/app/src/main/res/menu/cards_menu.xml" value="0.30052083333333335" />
+        <entry key="..\:/_GEEK/02_ANDROID/Projects/SchoolDiary/app/src/main/res/layout/activity_main.xml" value="0.35989583333333336" />
         <entry key="..\:/_GEEK/02_ANDROID/Projects/SchoolDiary/app/src/main/res/layout/fragment_diary.xml" value="0.35989583333333336" />
         <entry key="..\:/_GEEK/02_ANDROID/Projects/SchoolDiary/app/src/main/res/layout/fragment_diary_recycler_cardview_item.xml" value="0.36041666666666666" />
         <entry key="..\:/_GEEK/02_ANDROID/Projects/SchoolDiary/app/src/main/res/layout/fragment_diary_recycler_item.xml" value="0.35885416666666664" />

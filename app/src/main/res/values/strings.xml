@@ -9,4 +9,8 @@
     <string name="save">Save</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="cancel">Cancel</string>
+    <string name="array">ARRAY</string>
+    <string name="sharpref">SharPref</string>
+    <string name="firebase">FireBase</string>
 </resources>
