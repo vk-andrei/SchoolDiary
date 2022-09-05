@@ -10,15 +10,15 @@ public class Publisher {
     /** Лист наших подписчиков **/
     private List<Observer> observers;
 
-    Publisher() {
+    public Publisher() {
         observers = new ArrayList<>();
     }
 
     /** Подписываем и отписываем подписчиков **/
-    private void subscribe(Observer observer) {
+    public void subscribe(Observer observer) {
         observers.add(observer);
     }
-    private void unSubscribe(Observer observer) {
+    public void unSubscribe(Observer observer) {
         observers.remove(observer);
     }
 

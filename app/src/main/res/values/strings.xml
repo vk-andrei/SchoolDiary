@@ -6,4 +6,7 @@
     <string name="update">Update</string>
     <string name="add_lesson">Add lesson</string>
     <string name="clear_all">Clear all</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 </resources>

@@ -25,7 +25,7 @@ import com.example.schooldiary.repository.CardsSourceLocalImpl;
 
 import java.util.Calendar;
 
-public class DiaryFragment extends Fragment implements OnMyItemClickListener, Observer {
+public class DiaryFragment extends Fragment implements OnMyItemClickListener {
 
     DiaryAdapter diaryAdapter;
     CardsSource cardsSource;
@@ -37,21 +37,21 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener, Ob
 
     public static DiaryFragment newInstance() {
         DiaryFragment fragment = new DiaryFragment();
-        Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        /*Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);*/
         return fragment;
     }
 
-    @Override
+/*    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null) {
+        *//*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
-    }
+        }*//*
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,8 +82,8 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener, Ob
 
         /** Незатейливая анимация для начала **/
         DefaultItemAnimator animator = new DefaultItemAnimator();
-        animator.setChangeDuration(5000);
-        animator.setRemoveDuration(5000);
+        animator.setChangeDuration(1500);
+        animator.setRemoveDuration(1500);
         recyclerView.setItemAnimator(animator);
         /**************************************/
 
@@ -126,8 +126,8 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener, Ob
 
     @Override
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        requireActivity().getMenuInflater().inflate(R.menu.card_menu, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
+        requireActivity().getMenuInflater().inflate(R.menu.card_menu, menu);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -135,23 +135,29 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener, Ob
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int menuPosition = diaryAdapter.getMenuPosition();
         switch (item.getItemId()) {
-            case R.id.action_update:
-                cardsSource.updateCardData(menuPosition, new CardData("Upd card" + cardsSource.size(),
-                        "Upd desc" + cardsSource.size(),
-                        cardsSource.getCardData(menuPosition).getImage(), false,
-                        Calendar.getInstance().getTime()));
-                diaryAdapter.notifyItemChanged(menuPosition);
+            case R.id.action_update: {
+                // Создадим аноним экземпл класса ЗДЕСЬ И СЕЙЧАС. На месте реализуем метод Обсервера
+                // - создаем колбек. Сюда будет приходить ответ от ПАБЛИШЕРА
+                Observer observer = new Observer() {
+                    @Override
+                    public void receivedMessage(CardData cardData) {
+                        // получаем ОТВЕТ и ОТПИСЫВАЕМСЯ
+                        ((MainActivity) requireActivity()).getPublisher().unSubscribe(this);
+                        cardsSource.updateCardData(menuPosition, cardData);
+                        diaryAdapter.notifyItemChanged(menuPosition);
+                    }
+                };
+                // ПОДПИСЫВАЕМСЯ
+                ((MainActivity) requireActivity()).getPublisher().subscribe(observer);
+                ((MainActivity) requireActivity()).getNavigation().addFragment(CardEditorFragment.newInstance(cardsSource.getCardData(menuPosition)), true);
                 return true;
-            case R.id.action_delete:
+            }
+            case R.id.action_delete: {
                 cardsSource.deleteCardData(menuPosition);
                 diaryAdapter.notifyItemRemoved(menuPosition);
                 return true;
+            }
         }
         return super.onContextItemSelected(item);
-    }
-
-    @Override
-    public void receivedMessage(CardData cardData) {
-
     }
 }

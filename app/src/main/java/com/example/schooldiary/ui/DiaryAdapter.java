@@ -1,5 +1,6 @@
 package com.example.schooldiary.ui;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.MyViewHolder
     // Можно так (и лучше так)
     public void setData(CardsSource cardsSource) {
         this.cardsSource = cardsSource;
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // команда адаптеру отрисовать все(!) полученные данные
     }
 
     // а можно и в конструктор
@@ -109,9 +110,10 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.MyViewHolder
         }
 
         // связываем контент с макетом
+        @SuppressLint("SetTextI18n")
         public void bindContentWithLayout(CardData content) {
             tvLessonName.setText(content.getTitle());
-            tvLessonDescription.setText(content.getDescription());
+            tvLessonDescription.setText(content.getDescription() + " " + content.getDate());
             imgLesson.setImageResource(content.getImage());
             chkLesson.setChecked(content.isLike());
         }
