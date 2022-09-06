@@ -28,6 +28,8 @@ import com.example.schooldiary.repository.CardData;
 import com.example.schooldiary.repository.CardsSource;
 import com.example.schooldiary.repository.CardsSourceLocalImpl;
 import com.example.schooldiary.repository.CardsSourceSharedPrefImpl;
+import com.example.schooldiary.repository.remote.CardsSourceRemoteImpl;
+import com.example.schooldiary.repository.remote.RemoteFireStoreResponse;
 
 import java.util.Calendar;
 
@@ -93,8 +95,12 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
                 initDiaryAdapter();
                 break;
             case KEY_SOURCE_FIRE_BASE:
-                //cardsSource = new CardsSourceFireBaseImpl(requireContext().getResources()).init();
-                initDiaryAdapter();
+                cardsSource = new CardsSourceRemoteImpl().init(new RemoteFireStoreResponse() {
+                    @Override
+                    public void initialized(CardsSource cardsSource) {
+                        initDiaryAdapter();
+                    }
+                });
                 break;
         }
     }
