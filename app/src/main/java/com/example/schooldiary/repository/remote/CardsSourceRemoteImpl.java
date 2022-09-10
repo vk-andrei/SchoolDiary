@@ -68,7 +68,6 @@ public class CardsSourceRemoteImpl implements CardsSource {
 
     @Override
     public CardData getCardData(int position) {
-
         return dataSource.get(position);
     }
 
@@ -81,28 +80,38 @@ public class CardsSourceRemoteImpl implements CardsSource {
     public void addCardData(CardData cardData) {
         dataSource.add(cardData);
 
-        collectionReference.add(CardDataMapping.toDocument(cardData));
-        // Можно так, но не обязательно
-        /*collectionReference.add(CardDataMapping.toDocument(cardData)).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        //collectionReference.add(CardDataMapping.toDocument(cardData));
+        // Можно так как выше, а можно и так, но не обязательно
+        collectionReference.add(CardDataMapping.toDocument(cardData)).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 cardData.setId(documentReference.getId());
             }
-        });*/
+        });
     }
 
     @Override
     public void clearAllCards() {
+
+        for (CardData cardData: dataSource) {
+            collectionReference.document(cardData.getId()).delete();
+        }
+
         dataSource.clear();
     }
 
     @Override
     public void updateCardData(int position, CardData newCardData) {
         dataSource.set(position, newCardData);
+
+        String id = newCardData.getId();
+        collectionReference.document(id).set(CardDataMapping.toDocument(newCardData));
+
     }
 
     @Override
     public void deleteCardData(int position) {
+        collectionReference.document(dataSource.get(position).getId()).delete();
         dataSource.remove(position);
     }
 }

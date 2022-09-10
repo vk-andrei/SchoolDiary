@@ -101,6 +101,7 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
                         initDiaryAdapter();
                     }
                 });
+                initDiaryAdapter();
                 break;
         }
     }
@@ -202,12 +203,33 @@ public class DiaryFragment extends Fragment implements OnMyItemClickListener {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                cardsSource.addCardData(new CardData("New card" + cardsSource.size(),
+                /*cardsSource.addCardData(new CardData("New card" + cardsSource.size(),
                         "New desc" + cardsSource.size(), R.drawable.algebra, false,
                         Calendar.getInstance().getTime()));
                 diaryAdapter.notifyItemInserted(cardsSource.size() - 1);
                 recyclerView.smoothScrollToPosition(cardsSource.size() - 1);
+                return true;*/
+
+                // Создадим аноним экземпл класса ЗДЕСЬ И СЕЙЧАС. На месте реализуем метод Обсервера
+                // - создаем колбек. Сюда будет приходить ответ от ПАБЛИШЕРА
+                Observer observer = new Observer() {
+                    @Override
+                    public void receivedMessage(CardData cardData) {
+                        // получаем ОТВЕТ и ОТПИСЫВАЕМСЯ
+                        ((MainActivity) requireActivity()).getPublisher().unSubscribe(this);
+                        cardsSource.addCardData(cardData);
+                        diaryAdapter.notifyItemInserted(cardsSource.size() - 1);
+                        recyclerView.smoothScrollToPosition(cardsSource.size() - 1);
+                    }
+                };
+                // ПОДПИСЫВАЕМСЯ
+                ((MainActivity) requireActivity()).getPublisher().subscribe(observer);
+                ((MainActivity) requireActivity()).getNavigation().addFragment
+                        (CardEditorFragment.newInstance(new CardData("", "",
+                                R.drawable.algebra, false, Calendar.getInstance().getTime())), true);
                 return true;
+
+
             case R.id.action_clear:
                 cardsSource.clearAllCards();
                 diaryAdapter.notifyDataSetChanged();
